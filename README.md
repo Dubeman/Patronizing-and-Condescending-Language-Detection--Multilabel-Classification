@@ -1,29 +1,93 @@
+# Patronizing and Condescending Language Detection (Multi-label Classification)
 
-# Patronizing and Condescending Language Detection (Multilabel classification)
-In this project we deal with the class of NLP classification problems called Patronizing and Conde- scending Language (PCL) Detection. Before that i would like to talk in brief, about the motivation behind these sets of problems. When one engages in PCL ,the language use shows a superior attitude towards others or depicts them in a compassionate way. This effect is not always conscious and the intention of the author is often to help the person or group they refer to (e.g. by raising awareness or funds, or moving the audience to action). However, these superior attitudes and a discourse of pity can routinize discrimination and make it less visible
+This repository contains a multi-label NLP text classification project for detecting **Patronizing and Condescending Language (PCL)**.
 
-## Data description
-All data is available upon request at [this](https://github.com/Perez-AlmendrosC/dontpatronizeme) repository.
+PCL is language that adopts a *superior* or *pitying* tone toward individuals or communities, often while the author intends to be helpful (e.g., raising awareness or funds). Even when unintentional, this framing can reinforce stereotypes and normalize discrimination by making it feel “routine” or socially acceptable.
 
-The file ’dontpatronizeme categories.tsv’ is the PCL multilabel classification dataset. It contains 993 paragraphs again annotated with labels in a one hot vector array form. There are seven categories namely :-(i) Unbalanced Power Relations (ii)Shallow Solution (iii)Presupposition (iv) Authority Voice (v)Metaphor (vi) Compassion (vii)The poorer the merrier. The i’th entry in the array is 1 if that category is detected in a text span, otherwise it’s 0.Each paragraph might contain one or more text spans with PCL, which may be assigned to the same or to different categories.
+## Dataset
 
+The dataset comes from the **Don’t Patronize Me!** project and can be obtained from the original repository:
+- https://github.com/Perez-AlmendrosC/dontpatronizeme
 
-## Tasks at hand :-
+### File
+- `dontpatronizeme_categories.tsv`
 
-(i) Feature Extraction - We employ TF-IDF and the pretrained Google Word2Vec (Mikolov et. Al 2013) with a 200 dimensional vector.  
+### Format
+The dataset contains **993 paragraphs** annotated for **multi-label classification**.
 
-(ii)Multilabel Classification using Statistical NLP. 
+Each example has a **7-dimensional one-hot label vector**. The *i-th* entry is `1` if the corresponding category is present in the paragraph; otherwise it is `0`. A paragraph may contain one or more PCL spans and can be assigned **multiple labels**.
 
-(iii) Performance Analysis
+### Label set (7 categories)
+1. Unbalanced Power Relations
+2. Shallow Solution
+3. Presupposition
+4. Authority Voice
+5. Metaphor
+6. Compassion
+7. The Poorer, the Merrier
 
+## Project tasks
 
+1. **Feature extraction**
+   - TF–IDF
+   - Pretrained **Google Word2Vec** embeddings (Mikolov et al., 2013), **200-dimensional**
 
+2. **Multi-label classification (Statistical NLP)**
 
-## 🛠 Skills
-Python 3
+3. **Performance analysis**
 
+## Requirements
 
-## Citations
+- Python **3.10+**
+- scikit-learn **0.24.1**
+- scikit-multilearn
+- gensim **4.1.2**
+- NLTK
+
+> Tip: It’s recommended to create a virtual environment before installing dependencies.
+
+## Usage
+
+Training is done via command line. In the examples below, replace `classifier.py` with the training script you want to run.
+
+### Command template
+
+```bash
+python3 <filename>.py [OPTIONS]
+```
+
+### Arguments
+
+| Parameter | Description |
+|---|---|
+| `--load` | Path to the raw `.tsv` or `.csv` file. Example: `--load /path/to/dontpatronizeme_categories.tsv` |
+| `--name`, `-n` | Classifier type. Supported: `classifier_chains`, `LP` (Label Powerset), `BR` (Binary Relevance). Example: `--name BR` |
+| `--input_type` | Feature extraction method: `tfidf` or `gword2vec`. Example: `--input_type tfidf` |
+| `--preprocess` | Preprocessing option: `l` (lemmatize), `s` (stemming), `n` (none). Example: `--preprocess n` |
+| `--stopwords` | If set, removes stopwords. (Flag; no value needed.) |
+| `--features` | Number of features to use. Example: `--features 200` |
+| `--save` | If set, saves the trained model. (Flag; no value needed.) |
+
+### Example
+
+Binary Relevance with Google Word2Vec, lemmatization, stopword removal, 200 features, and saving the model:
+
+```bash
+python3 classifier.py \
+  --load /x/y/z/dontpatronizeme_categories.tsv \
+  --name BR \
+  --input_type gword2vec \
+  --preprocess l \
+  --stopwords \
+  --features 200 \
+  --save
+```
+
+## Citation
+
+If you use this dataset, please cite:
+
+```bibtex
 @inproceedings{perez-almendros2020dontpatronizeme,
   title={Don’t Patronize Me! An Annotated Dataset with Patronizing and Condescending Language towards Vulnerable Communities},
   author={Perez-Almendros, Carla and Espinosa-Anke, Luis and Schockaert, Steven},
@@ -31,49 +95,4 @@ Python 3
   pages={5891--5902},
   year={2020}
 }
-## How to Use
-README FILE
- 
-Patronized Condescending Language
-
-Read this file before running the code inorder to understand commands required to run the code.
-
-##System dependencies
-
-—python==3.10 or above
-
-—Scikit-learn==0.24.1
-
-—Scikit-multilearn
-
-—gensim==4.1.2
-
--NLTK
-
-## Here we provide commands needed to train the model, just append whatever processing you want to do to the command (python3 filename.py ) on terminal:
-
-| Parameters       |         Description |
-| -------------    | --------------------|
- 
-| ``—-load``          | path to raw '.tsv' file or '.csv' file  e.g --load /DATA1/NLP/XXXX/YYYY/dontpatronizeme_categories.tsv (give the path to csv)|   
-|
-| ``--name``, ``-n``  | classifier to use classifierchains('classifier_chains' ), Label Powerset('LP'), Binary Relevance ('BR') ,e.g -name BR  |
-
-| ``—input_type``     | what type of feature extraction do you want (tf-idf or gword2vec)  ,e.g --input_type tfidf (if you want tfidf) |
-
-| ``—preprocess``     | preprocessing you want lemmatize('l'), stemming('s') and no-preprocessing ('n') e.g --preprocess n (if you don't want any prepprocessing)|
-
-| ``—stop words``     | if you want to remove stopwords or not ,e.g --stopwords (if you want to remove stopwords) |
-
-| ``—features``       | number of features you want ,e.g --features 200 |
-
-| ``--save``          | to save the classifier model or not ,e.g --save (if you want to save the model)|
-
-
-
-## example running files
-
-If you want to run Binary Relevance classifier , feature extraction technique is gword2vec, save the model, preprocessing is lemmatisation , number of features are 200 and you want to remove stop words and path to csv is /x/y/z then command will be as follows, if classifier.py is the file:
-
--->   python3 classifier.py --load /x/y/z --name BR --input_type gword2vec --preprocess l --stopwords --features 200 --save
-Footer
+```
