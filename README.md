@@ -1,4 +1,4 @@
-# Patronizing and Condescending Language Detection (Multi-label Classification)
+# PCL Detection (Multi-label Classification)
 
 This repository contains a multi-label NLP text classification project for detecting **Patronizing and Condescending Language (PCL)**.
 
